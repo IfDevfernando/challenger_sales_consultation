@@ -24,7 +24,8 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 	
 	@Query(" SELECT new com.devsuperior.dsmeta.dto.SellerSumDTO ( t.seller.name ,  t.amount ) "
 			+ " FROM Sale t "
-			+ " WHERE ( :minDate IS NULL OR  :maxDate IS NULL OR t.date BETWEEN :minDate AND :maxDate ) ")
+			+ " WHERE ( :minDate IS NULL OR  :maxDate IS NULL OR t.date BETWEEN :minDate AND :maxDate ) "
+			+ "ORDER BY t.date DESC")
 	public List<SellerSumDTO> sellerSummary(@Param("minDate") LocalDate minDate,@Param("maxDate")LocalDate maxDate);
 	
 	
