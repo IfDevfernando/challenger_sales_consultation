@@ -16,16 +16,19 @@ import com.devsuperior.dsmeta.entities.Sale;
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 	
 	
-	@Query(" SELECT new com.devsuperior.dsmeta.dto.SellerSumDTO ( t.seller.name , SUM( t.amount )) "
+	@Query(" SELECT new com.devsuperior.dsmeta.dto.SellerSumDTO ( x.name , SUM( t.amount )) "
 			+ " FROM Sale t "
+			+ "JOIN t.seller x "
 			+ " WHERE t.date BETWEEN :minDate AND :maxDate "
-			+ " GROUP BY t.seller.name ")
+			+ "GROUP BY x.name ")
 	public List<SellerSumDTO> sumSeller(@Param("minDate") LocalDate minDate,@Param("maxDate")LocalDate maxDate);
 	
-	@Query(" SELECT new com.devsuperior.dsmeta.dto.SellerSumDTO ( t.seller.name ,  t.amount ) "
-			+ " FROM Sale t "
-			+ " WHERE ( :minDate IS NULL OR  :maxDate IS NULL OR t.date BETWEEN :minDate AND :maxDate ) "
-			+ "ORDER BY t.date DESC")
+	@Query(" SELECT new com.devsuperior.dsmeta.dto.SellerSumDTO ( x.name , t.amount ) "
+			+ "FROM Sale t "
+			+ "JOIN t.seller x "
+			+ "WHERE ( :minDate IS NULL OR  :maxDate IS NULL OR t.date BETWEEN :minDate AND :maxDate ) "
+			+ "GROUP BY x.name , t.amount "
+			+ "ORDER BY t.date DESC ")
 	public List<SellerSumDTO> sellerSummary(@Param("minDate") LocalDate minDate,@Param("maxDate")LocalDate maxDate);
 	
 	
