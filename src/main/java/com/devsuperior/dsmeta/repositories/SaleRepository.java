@@ -23,12 +23,11 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 			+ "GROUP BY x.name ")
 	public List<SellerSumDTO> sumSeller(@Param("minDate") LocalDate minDate,@Param("maxDate")LocalDate maxDate);
 	
-	@Query(" SELECT new com.devsuperior.dsmeta.dto.SellerSumDTO ( x.name , t.amount ) "
+	@Query(" SELECT new com.devsuperior.dsmeta.dto.SellerSumDTO ( x.name , SUM(t.amount) ) "
 			+ "FROM Sale t "
 			+ "JOIN t.seller x "
 			+ "WHERE ( :minDate IS NULL OR  :maxDate IS NULL OR t.date BETWEEN :minDate AND :maxDate ) "
-			+ "GROUP BY x.name , t.amount "
-			+ "ORDER BY t.date DESC ")
+			+ "GROUP BY x.name ")
 	public List<SellerSumDTO> sellerSummary(@Param("minDate") LocalDate minDate,@Param("maxDate")LocalDate maxDate);
 	
 	
